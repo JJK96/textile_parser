@@ -1,0 +1,26 @@
+\begin{issue}{
+        \VAR{title}
+    }
+    \cvss{\VAR{cvss_score}}
+    \description{
+        \VAR{description}
+    }
+    \solution{
+        \VAR{solution}
+    }
+    \cvssvector{\VAR{cvss_vector}}
+    \location{
+        \BLOCK{ for location in evidences|map(attribute='location')|unique }
+        \VAR{location}\BLOCK{ if not loop.last },\BLOCK{ endif }
+        \BLOCK{ endfor }
+    }
+
+    \VAR{description}
+
+    \BLOCK{ for evidence in evidences }
+    \begin{evidence}{\VAR{evidence.location}}
+        \VAR{evidence.description}
+    \end{evidence}
+    \BLOCK{ endfor }
+
+\end{issue}

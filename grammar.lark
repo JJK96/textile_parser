@@ -1,0 +1,31 @@
+elements: WS* element+
+?element: field content
+?field: NEWLINE* "#[" FIELD_NAME "]#" NEWLINE
+content: contents*
+?contents: paragraph
+    | code_block
+code_block: CODE_BLOCK_START (LINE? NEWLINE)+
+paragraph: PARAGRAPH_START? (paragraph_line | bullets | enumeration | footnote)+
+bullets: bullet+
+bullet: BULLET paragraph_line
+enumeration: item+
+item: ENUMERATION_ITEM_START paragraph_line
+footnote: FOOTNOTE_START LINE NEWLINE+
+paragraph_line: (PARAGRAPH_LINE | FOOTNOTE_ANCHOR)* NEWLINE
+
+NEWLINE: /[\r\n]/
+FIELD_NAME: /[^\]]+/
+FOOTNOTE_START: /bc\.\.? fn\d\. /
+CODE_BLOCK_START: /bc\.\.? /
+PARAGRAPH_START: /p\. /
+LINE.-1: /.+/
+
+// Priority lower than LINE, but higher than PARAGRAPH_LINE, to only match in paragraphs
+BULLET.-2: /[\*#] +/
+ENUMERATION_ITEM_START.-2: /\d+\. +/
+FOOTNOTE_ANCHOR.-2: /<\d>/
+
+// Stop at 
+PARAGRAPH_LINE.-3: /.+?(?=(<\d>|\r|\n))/
+
+%import common.WS
