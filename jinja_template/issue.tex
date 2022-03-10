@@ -1,12 +1,17 @@
 \begin{issue}{
         \VAR{title}
-    }
-    \cvss{\VAR{cvss_score}}
-    \descriptionfield{
+    }{
         \VAR{description}
     }
-    \solution{
-        \VAR{solution}
+    \cvss{\VAR{cvss_score}}
+    \summary{
+        \VAR{summary}
+    }
+    \risk{
+        \VAR{risk}
+    }
+    \recommendation{
+        \VAR{recommendation}
     }
     \cvssvector{\VAR{cvss_vector}}
     \location{
@@ -15,12 +20,11 @@
         \BLOCK{ endfor }
     }
 
-    \VAR{description}
-
     \BLOCK{ for evidence in evidences }
     \begin{evidence}{\VAR{evidence.location}}
         \VAR{evidence.description}
     \end{evidence}
+    \BLOCK{ if not loop.last }~\newline\BLOCK{ endif }
     \BLOCK{ endfor }
 
 \end{issue}
