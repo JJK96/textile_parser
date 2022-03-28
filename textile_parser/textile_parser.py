@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import re
 from . import latex_jinja
 from os.path import join, realpath, dirname
+import sys
 
 
 dir = realpath(dirname(__file__))
@@ -68,10 +69,19 @@ class JinjaEnv(Interpreter):
     def field_name(self, items):
         return items[0]
 
-    @visit_children_decor
-    def content(self, items):
+    def content(self, tree):
+        self.footnotes = {} 
+
+        # Get all footnotes
+        for item in tree.iter_subtrees():
+            if item.data == "footnote":
+                index, link = self.visit(item)
+                self.footnotes[index] = link
+
+        # Parse the rest
         output = []
-        for item in items:
+        for item in tree.children:
+            item = self.visit(item)
             item = item.strip()
             # Check if item was not only newline/whitespace
             if item:
@@ -79,20 +89,13 @@ class JinjaEnv(Interpreter):
         return "\n\n".join(output)
 
     def paragraph(self, tree):
-        self.footnotes = {}
-        new_items = []
-        # Get all footnotes
+        output = []
         for item in tree.children:
             if not isinstance(item, Tree):
                 continue
             if item.data == "footnote":
-                index, link = self.visit(item)
-                self.footnotes[index] = link
-            else:
-                new_items.append(item)
-
-        output = []
-        for item in new_items:
+                # Footnotes have already been parsed at this point
+                continue
             output.append(self.visit(item))
         return "".join(output)
 
@@ -175,7 +178,11 @@ def read_file(filename):
 
 
 def parse_textile_file(filename):
-    return parse_textile(read_file(filename))
+    try:
+        return parse_textile(read_file(filename))
+    except Exception as e:
+        print(f"Exception while parsing {filename}:", file=sys.stderr)
+        raise e
 
 
 def issue_files_to_latex(issue_file, evidence_files=[], evidence_locations=[]):
