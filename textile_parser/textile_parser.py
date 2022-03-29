@@ -131,7 +131,12 @@ class JinjaEnv(Interpreter):
 
     def FOOTNOTE_ANCHOR(self, item):
         m = re.match(r"<(\d)>", item)
-        return r"\footnote{" + latex_encode(self.footnotes[m.group(1)]) + "}"
+        footnote_index = m.group(1)
+        try:
+            footnote_text = self.footnotes[footnote_index]
+        except KeyError:
+            raise Exception("No footnote found for anchor: <{footnote_index}>.")
+        return r"\footnote{" + latex_encode(footnote_text) + "}"
 
     @visit_children_decor
     def footnote(self, items):
