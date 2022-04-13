@@ -11,9 +11,13 @@ bullet: BULLET paragraph_line
 enumeration: item+
 item: ENUMERATION_ITEM_START paragraph_line
 footnote: FOOTNOTE_START LINE NEWLINE+
-paragraph_line: (PARAGRAPH_LINE | FOOTNOTE_ANCHOR)* NEWLINE
+paragraph_line: (PARAGRAPH_LINE | FOOTNOTE_ANCHOR | monospace_text | italics_text | bold_text)* NEWLINE
+italics_text: UNDERSCORE_START UNDERSCORE_TEXT UNDERSCORE_END
+bold_text: STAR_START STAR_TEXT STAR_END
+monospace_text: "`" BACKTICK_TEXT "`"
 
 NEWLINE: /[\r\n]/
+WS: /\s/
 FIELD_NAME: /[^\]]+/
 FOOTNOTE_START: /bc\.\.? fn\d\. /
 CODE_BLOCK_START: /bc\.\.? /
@@ -22,10 +26,15 @@ LINE.-1: /.+/
 
 // Priority lower than LINE, but higher than PARAGRAPH_LINE, to only match in paragraphs
 BULLET.-2: /[\*#] +/
+STAR_START.-2: /(?<=[^\w])\*/
+UNDERSCORE_START.-2: /(?<=[^\w])_/
+STAR_END.-2: /\*(?=[^\w])/
+UNDERSCORE_END.-2: /_(?=[^\w])/
 ENUMERATION_ITEM_START.-2: /\d+\. +/
 FOOTNOTE_ANCHOR.-2: /<\d>/
+BACKTICK_TEXT.-2: /[^`]+/
+STAR_TEXT.-2: /[^*]+/
+UNDERSCORE_TEXT.-2: /[^_]+/
 
-// Stop at 
-PARAGRAPH_LINE.-3: /.+?(?=(<\d>|\r|\n))/
-
-%import common.WS
+// Stop at FOOTNOTE_ANCHOR
+PARAGRAPH_LINE.-3: /.+?(?=(<\d>|\n|\r|\*|`|_))/

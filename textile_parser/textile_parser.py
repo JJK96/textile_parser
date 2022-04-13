@@ -103,7 +103,7 @@ class JinjaEnv(Interpreter):
     def paragraph_line(self, items):
         output = []
         for item in items:
-            if item.type == "FOOTNOTE_ANCHOR":
+            if hasattr(item, 'type') and item.type == "FOOTNOTE_ANCHOR":
                 item = self.FOOTNOTE_ANCHOR(item)
             else:
                 item = latex_encode(item)
@@ -137,6 +137,18 @@ class JinjaEnv(Interpreter):
         except KeyError:
             raise Exception("No footnote found for anchor: <{footnote_index}>.")
         return r"\footnote{" + latex_encode(footnote_text) + "}"
+
+    @visit_children_decor
+    def bold_text(self, items):
+        return r"\textbf{" + latex_encode(items[1]) + "}"
+
+    @visit_children_decor
+    def italics_text(self, items):
+        return r"\textit{" + latex_encode(items[1]) + "}"
+
+    @visit_children_decor
+    def monospace_text(self, items):
+        return r"\texttt{" + latex_encode(items[0]) + "}"
 
     @visit_children_decor
     def footnote(self, items):

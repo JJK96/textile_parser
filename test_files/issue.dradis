@@ -12,9 +12,14 @@ p. Some text
 
 bc.. This is another code block with a footnote anchor that should be rendered normally
 <1>
+**`_
 Some more code
 
-p. Here we have some text again
+p. Here we have some text again.
+Here is a username with an underscore: "user_name".
+The following_ text should be monospace `this text* is monospace`.
+The followi*ng text should be bold *this text `is bold*.
+The following text should be italics _this text* is italics_.
 
 Here are some bullets:
 * a
