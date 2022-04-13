@@ -26,10 +26,10 @@ LINE.-1: /.+/
 
 // Priority lower than LINE, but higher than PARAGRAPH_LINE, to only match in paragraphs
 BULLET.-2: /[\*#] +/
-STAR_START.-2: /(?<=[^\w])\*/
-UNDERSCORE_START.-2: /(?<=[^\w])_/
-STAR_END.-2: /\*(?=[^\w])/
-UNDERSCORE_END.-2: /_(?=[^\w])/
+STAR_START.-2: /(?<=[\s\.,])\*/
+UNDERSCORE_START.-2: /(?<=[\s\.,])_/
+STAR_END.-2: /\*(?=[\s\.,])/
+UNDERSCORE_END.-2: /_(?=[\s\.,])/
 ENUMERATION_ITEM_START.-2: /\d+\. +/
 FOOTNOTE_ANCHOR.-2: /<\d>/
 BACKTICK_TEXT.-2: /[^`]+/
