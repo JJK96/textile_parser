@@ -15,12 +15,13 @@
         \VAR{location}\BLOCK{ if not loop.last },\BLOCK{ endif }
         \BLOCK{ endfor }
     }
+    \VAR{description}
 
     \BLOCK{ for evidence in evidences }
     \begin{evidence}{\VAR{evidence.location}}
         \VAR{evidence.description}
     \end{evidence}
-    \BLOCK{ if not loop.last }~\newline\BLOCK{ endif }
+    \BLOCK{ if not loop.last }~\newline\newline\BLOCK{ endif }
     \BLOCK{ endfor }
 
 \end{issue}
