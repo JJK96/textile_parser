@@ -18,10 +18,11 @@
     \VAR{description}
 
     \BLOCK{ for evidence in evidences }
-    \begin{evidence}{\VAR{evidence.location}}
-        \VAR{evidence.description}
-    \end{evidence}
-    \BLOCK{ if not loop.last }~\newline\newline\BLOCK{ endif }
+        \BLOCK{ if evidence.description }
+            \begin{evidence}{\VAR{evidence.location}}
+                \VAR{evidence.description}
+            \end{evidence}
+        \BLOCK{ endif }
     \BLOCK{ endfor }
 
 \end{issue}
