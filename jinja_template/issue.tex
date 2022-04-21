@@ -1,13 +1,10 @@
 \begin{issue}\BLOCK{ if label }[\VAR{label}]\BLOCK{ endif }{ \VAR{title} }
     \cvss{\VAR{cvss_score}}
-    \summary{
-        \VAR{summary}
+    \descriptionfield{
+        \VAR{description}
     }
-    \risk{
-        \VAR{risk}
-    }
-    \recommendation{
-        \VAR{recommendation}
+    \solution{
+        \VAR{solution}
     }
     \cvssvector{\VAR{cvss_vector}}
     \location{
@@ -18,9 +15,9 @@
     \VAR{description}
 
     \BLOCK{ for evidence in evidences }
-        \BLOCK{ if evidence.description }
+        \BLOCK{ if evidence.output }
             \begin{evidence}{\VAR{evidence.location}}
-                \VAR{evidence.description}
+                \VAR{evidence.output}
             \end{evidence}
         \BLOCK{ endif }
     \BLOCK{ endfor }
