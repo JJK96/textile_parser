@@ -46,6 +46,13 @@ class Evidence:
     textile: str
 
 
+@dataclass
+class TableLine:
+    text: str
+    is_header: bool
+    num_columns: int
+
+
 class JinjaEnv(Interpreter):
     footnotes = {}
 
@@ -98,6 +105,56 @@ class JinjaEnv(Interpreter):
                 continue
             output.append(self.visit(item))
         return "".join(output)
+
+    @visit_children_decor
+    def table(self, items):
+        separator = " \\tnl\n"
+        table_content = []
+        columns_descriptor = None
+        i = 0
+        header = ""
+        for item in items:
+            if hasattr(item, 'type') and item.type == "TABLE_CAPTION_TEXT":
+                # Don't do anything with the caption at the moment
+                continue
+            if i == 0:
+                columns_descriptor = "|" + "L|"*(item.num_columns-1) + "L|"
+                if item.is_header:
+                    header = "\\theadstart\n" + item.text + separator
+            else:
+                # Add normal lines
+                table_content.append(item.text)
+            i += 1
+        table_content = separator.join(table_content) + separator
+        return f"""\
+            \\begin{{tabulary}}{{\\textwidth}}{{{columns_descriptor}}}
+                {header}
+                \\tbody
+                {table_content}
+                \\tend
+            \\end{{tabulary}}"""
+
+    @visit_children_decor
+    def table_caption(self, items):
+        # Return the caption text
+        return items[1]
+
+    @visit_children_decor
+    def table_line(self, items):
+        is_header = False
+        output = []
+        for item in items:
+            if not item.type == "TABLE_TEXT":
+                continue
+            if item.startswith("_."):
+                # Table header
+                item = "\\thead " + item[2:]
+                is_header = True
+            output.append(item)
+        return TableLine(
+            " & ".join(output),
+            is_header,
+            num_columns = len(output))
 
     @visit_children_decor
     def paragraph_line(self, items):

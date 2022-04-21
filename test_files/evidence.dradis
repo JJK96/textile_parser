@@ -1,6 +1,13 @@
-#[Output]#
+#[Description]#
 Some output
 
 bc..  This is a code block
 
 p. This is some more text
+
+table(PortScanTable).
+|_.Port|_.Type|_.State|_.Service|_.Header|
+|80|tcp|open|http||
+|443|tcp|open|https||
+
+Some more text
