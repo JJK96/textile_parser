@@ -229,8 +229,13 @@ def evidence_content(evidence):
     return content
 
 
+def check_issue(content):
+    # Ensure that cvss_score is a float
+    float(content['cvss_score'])
+
 def issue_content(issue, evidences=[]):
     content = parse_textile(issue)
+    check_issue(content)
     content['evidences'] = [evidence_content(e) for e in evidences]
     return content
 
