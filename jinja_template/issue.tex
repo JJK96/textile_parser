@@ -7,8 +7,8 @@
         \VAR{solution}
     }
     \cvssvector{\VAR{cvss_vector}}
-    \location{
-        \begin{flushleft}
+    \location{%
+        \raggedright\arraybackslash%
         \BLOCK{ if location }
             \VAR{location}
         \BLOCK{ else }
@@ -16,7 +16,6 @@
             \VAR{location}\BLOCK{ if not loop.last },\BLOCK{ endif }
             \BLOCK{ endfor }
         \BLOCK{ endif }
-        \end{flushleft}
     }
     \VAR{description}
 
