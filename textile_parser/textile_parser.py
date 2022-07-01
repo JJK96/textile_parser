@@ -173,6 +173,11 @@ class JinjaEnv(Interpreter):
         return r"\begin{code}" + "\n" + "".join(items) + r"\end{code}"
 
     @visit_children_decor
+    def inline_code_block(self, items):
+        items = filter(lambda x: x.type != "INLINE_CODE_BLOCK_START", items)
+        return r"\begin{code}" + "\n" + "".join(items) + r"\end{code}"
+
+    @visit_children_decor
     def bullets(self, items):
         return r"\begin{itemize}" + "\n" + ''.join(items) + r"\end{itemize}" + "\n"
 

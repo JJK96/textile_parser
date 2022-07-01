@@ -11,3 +11,7 @@ table(PortScanTable).
 |443|tcp|open|https||
 
 Some more text
+
+bc. Inline code block
+
+Some more text

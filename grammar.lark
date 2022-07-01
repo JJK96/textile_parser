@@ -4,7 +4,9 @@ elements: WS* element+
 content: contents*
 ?contents: paragraph
     | code_block
+    | inline_code_block
 code_block: CODE_BLOCK_START (LINE? NEWLINE)+
+inline_code_block: INLINE_CODE_BLOCK_START LINE NEWLINE
 paragraph: PARAGRAPH_START? (paragraph_line | bullets | enumeration | footnote | table)+
 bullets: bullet+
 bullet: BULLET paragraph_line
@@ -23,7 +25,8 @@ NEWLINE: /[\r\n]/
 WS: /\s/
 FIELD_NAME: /[^\]]+/
 FOOTNOTE_START: /bc\.\.? fn\d\. /
-CODE_BLOCK_START: /bc\.\.? /
+CODE_BLOCK_START: /bc\.\. /
+INLINE_CODE_BLOCK_START: /bc\. /
 PARAGRAPH_START: /p\. /
 LINE.-1: /.+/
 
