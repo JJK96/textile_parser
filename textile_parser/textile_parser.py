@@ -56,6 +56,11 @@ class TableLine:
 class JinjaEnv(Interpreter):
     footnotes = {}
 
+    def __init__(self, table_headers=True, table_newline="\\tnl"):
+        self.table_headers = table_headers
+        self.table_newline = table_newline
+        super().__init__()
+
     @visit_children_decor
     def elements(self, elements):
         res = {}
@@ -108,7 +113,7 @@ class JinjaEnv(Interpreter):
 
     @visit_children_decor
     def table(self, items):
-        separator = " \\tnl\n"
+        separator = " {}\n".format(self.table_newline)
         table_content = []
         columns_descriptor = None
         i = 0
@@ -126,13 +131,16 @@ class JinjaEnv(Interpreter):
                 table_content.append(item.text)
             i += 1
         table_content = separator.join(table_content) + separator
-        return f"""\
-            \\begin{{tabulary}}{{\\textwidth}}{{{columns_descriptor}}}
-                {header}
-                \\tbody
-                {table_content}
-                \\tend
-            \\end{{tabulary}}"""
+        if self.table_headers:
+            return f"""\
+                \\begin{{tabulary}}{{\\textwidth}}{{{columns_descriptor}}}
+                    {header}
+                    \\tbody
+                    {table_content}
+                    \\tend
+                \\end{{tabulary}}"""
+        else:
+            return table_content
 
     @visit_children_decor
     def table_caption(self, items):
@@ -219,12 +227,12 @@ class JinjaEnv(Interpreter):
         return index, items[1]
 
 
-def parse_textile(textile):
+def parse_textile(textile, **kwargs):
     # Ensure that file ends with a newline
     if textile[-1] != "\n":
         textile += "\n"
     tree = parser.parse(textile)
-    return JinjaEnv().visit(tree)
+    return JinjaEnv(**kwargs).visit(tree)
 
 
 def evidence_content(evidence):
