@@ -15,7 +15,7 @@ DEFAULT_LOCATION = "unknown"
 
 
 def latex_encode(value):
-    to_escape = r"([#&])"
+    to_escape = r"([#&%])"
     return re.sub(to_escape, r"\\\1", value)
 
 
