@@ -244,7 +244,10 @@ def evidence_content(evidence):
 
 def check_issue(content):
     # Ensure that cvss_score is a float
-    float(content['cvss_score'])
+    try:
+        float(content['cvss_score'])
+    except ValueError:
+        raise ValueError("Incorrect CVSS score: {}".format(content['cvss_score']))
 
 def issue_content(issue, evidences=[]):
     content = parse_textile(issue)
