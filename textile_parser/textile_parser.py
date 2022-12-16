@@ -195,7 +195,7 @@ class JinjaEnv(Interpreter):
 
     @visit_children_decor
     def bullet(self, items):
-        return r"\item " + latex_encode(items[1])
+        return r"\item " + items[1]
 
     item = bullet
 
