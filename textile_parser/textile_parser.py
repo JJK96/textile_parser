@@ -227,12 +227,28 @@ class JinjaEnv(Interpreter):
         return index, items[1]
 
 
-def parse_textile(textile, **kwargs):
+def generate_textile(content):
+    output = []
+    for k, v in content.items():
+        output.append(f"#[{k}]#\n{v}")
+    return "\n\n".join(output)
+
+
+def parse_textile(textile, raw=False, **kwargs):
     # Ensure that file ends with a newline
     if textile[-1] != "\n":
         textile += "\n"
-    tree = parser.parse(textile)
-    return JinjaEnv(**kwargs).visit(tree)
+    if raw:
+        split = re.split(r'#\[([^\]]+)\]#\n', textile, flags=re.MULTILINE)
+        res = {}
+        for i in range(1, len(split), 2):
+            field = split[i]
+            content = split[i+1].strip()
+            res[field] = content
+        return res
+    else:
+        tree = parser.parse(textile)
+        return JinjaEnv(**kwargs).visit(tree)
 
 
 def evidence_content(evidence):
@@ -270,9 +286,9 @@ def read_file(filename):
         return f.read()
 
 
-def parse_textile_file(filename):
+def parse_textile_file(filename, raw=False):
     try:
-        return parse_textile(read_file(filename))
+        return parse_textile(read_file(filename), raw=raw)
     except Exception as e:
         print(f"Exception while parsing {filename}:", file=sys.stderr)
         raise e
