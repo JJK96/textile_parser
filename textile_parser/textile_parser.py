@@ -210,15 +210,15 @@ class JinjaEnv(Interpreter):
 
     @visit_children_decor
     def bold_text(self, items):
-        return r"\textbf{" + latex_encode(items[1]) + "}"
+        return r"\textbf{" + items[1] + "}"
 
     @visit_children_decor
     def italics_text(self, items):
-        return r"\textit{" + latex_encode(items[1]) + "}"
+        return r"\textit{" + items[1] + "}"
 
     @visit_children_decor
     def monospace_text(self, items):
-        return r"\texttt{" + latex_encode(items[0]) + "}"
+        return r"\texttt{" + items[0] + "}"
 
     @visit_children_decor
     def footnote(self, items):
