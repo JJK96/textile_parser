@@ -205,7 +205,7 @@ class JinjaEnv(Interpreter):
         try:
             footnote_text = self.footnotes[footnote_index]
         except KeyError:
-            raise Exception("No footnote found for anchor: <{footnote_index}>.")
+            raise Exception(f"No footnote found for anchor: <{footnote_index}>.")
         return r"\footnote{" + latex_encode(footnote_text) + "}"
 
     @visit_children_decor
